@@ -1,0 +1,53 @@
+---
+#
+# Installing Jenkins
+#
+
+    # Add Jenkins apt key
+    - name: First, add Jenkins repository key to the system
+      apt_key:
+       url: "https://pkg.jenkins.io/debian-stable/jenkins.io.key"
+       state: present
+       
+    # Add the Jenkins  repo
+    - name: Adding Jenkins repo
+      shell:
+        cmd: sudo sh -c 'echo deb http://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
+
+
+
+    - name: Update repositories cache and install update package
+      apt:
+        update_cache: yes
+
+    - name: Install Jenkins
+      apt:
+        name: jenkins
+        state: present
+
+    # Start Jenkins
+
+    - name: Start & Enable Jenkins
+      systemd:
+        name: jenkins
+        state: started
+        enabled: true
+    
+    # Giving Jenkins 30s to Start to avoid problems
+
+    - name: Sleep for 30 seconds and continue with play
+      wait_for: timeout=30
+
+    
+    # Getting Jenkins init Password
+
+    - name: Get init password Jenkins
+      shell: cat /var/lib/jenkins/secrets/initialAdminPassword
+      changed_when: false
+      register: result
+
+    # Printing Jenkins init Password
+    - name: Print init password Jenkins
+      debug:
+        var: result.stdout
+        

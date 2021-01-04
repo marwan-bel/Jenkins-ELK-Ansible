@@ -1,0 +1,9 @@
+---
+
+internal_cidr: "172.31.0.0/16" # Includes VPC and Kubernetes subnets
+kubernetes_service_cluster_cidr: "10.32.0.0/24"
+kubernetes_pod_cluster_cidr: "172.31.0.0/16"
+kubernetes_cluster_dns: "172.31.0.1"
+kubernetes_version: "v1.20"
+
+server1_public_ip: "34.237.0.135"
